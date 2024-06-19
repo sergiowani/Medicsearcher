@@ -21,7 +21,10 @@ const StyledContainer = styled(Container)(({ theme }) => ({
 
 const StyledTitle = styled(Typography)({
   marginBottom: 20,
-  
+  '@media (max-width: 600px)': {
+    fontSize: '1.5rem',
+
+  },
 });
 
 const StyledList = styled('ul')({
@@ -44,6 +47,13 @@ const ErrorMessage = styled(Typography)({
   fontSize: '1.5rem',
 });
 
+const StyledLink = styled(MuiLink)({
+  cursor: 'pointer',
+/*   '@media (max-width: 600px)': {
+    textAlign: 'center',
+  }, */
+});
+
 /* componente */
 
 export const Results = () => {
@@ -56,9 +66,7 @@ export const Results = () => {
   let url = `https://api.fda.gov/drug/label.json?search=openfda.brand_name:${query}+OR+openfda.generic_name:${query}&limit=10`
 
   const { response, error, loading } = useAxios({ url, method: 'get' })
-  console.log(response);
-  /* console.log('aqui',drugs[0].id); */
-  
+
   useEffect(() => {
     if (response !== null) {
       setDrugs(response);
@@ -70,7 +78,7 @@ export const Results = () => {
       {/* <AppNavBar onClick={(text)=>{setQuery(text)}} /> */}
       <AppNavBar onClick={(text)=>{navigate(`/results?query=${text}`)}} />
       <StyledContainer maxWidth="lg" theme={{ palette: { mode: darkMode ? 'dark' : 'light' } }}>
-        <StyledTitle variant="h4">Resultados de búsqueda para "{query}"
+        <StyledTitle variant="h4">Resultados de búsqueda para "{query}":
         </StyledTitle>
         {loading && <LoadingMessage>Cargando...</LoadingMessage>}
         <StyledList>
@@ -79,9 +87,9 @@ export const Results = () => {
             ) : (
               drugs.map((drug, index) => (
                 <li key={index}>
-                  <MuiLink component="button" onClick={() => navigate(`/product/${drug.id}`, { state: { product: drug, query: query } })}>
+                  <StyledLink  component="a" onClick={() => navigate(`/product/${drug.id}`, { state: { product: drug, query: query } })}>
                     {drug.openfda.generic_name} ({drug.openfda.brand_name}) ({drug.openfda.route})
-                  </MuiLink>
+                  </StyledLink >
                 </li>
               ))
             )}

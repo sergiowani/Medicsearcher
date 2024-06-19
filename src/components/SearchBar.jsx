@@ -16,8 +16,8 @@ const SearchContainer = styled('div')(({ flexDirection, marginBottom, justifyCon
 const StyledTextField = styled(TextField)({
   marginBottom: 30,
   width: 'calc(100%/3)',
-  '@media (max-width: 600px)': {
-    width: '100%',
+  '@media (max-width: 950px)': {
+    width: '90%',
   },
   '& .MuiOutlinedInput-root': {
     borderRadius: 20,
@@ -34,8 +34,8 @@ const ButtonContainer = styled('div')({
   '& button:nth-of-type(2)': {
     marginLeft: 10,
   },
-  // Ocultar en tamaño móvil
-  '@media (max-width: 600px)': {
+  // Ocultar en tamaño tablet y móvil
+  '@media (max-width: 950px)': {
     display: 'none',
   },
 });

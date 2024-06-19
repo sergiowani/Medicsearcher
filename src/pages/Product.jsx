@@ -48,13 +48,13 @@ export const Product = () => {
   const query = location.state?.query;
 
   // Función para convertir el string de la tabla en JSX
-  const parsearTablaHTML = (tablaString) => {
+  const parseTableHTML = (tableString) => {
     let temporal = document.createElement('div');
-    temporal.innerHTML = tablaString.trim();
+    temporal.innerHTML = tableString.trim();
 
-    let tablaHTML = temporal.querySelector('table');
+    let tableHTML = temporal.querySelector('table');
 
-    return tablaHTML;
+    return tableHTML;
   };
 
   // Función para renderizar el valor
@@ -62,8 +62,8 @@ export const Product = () => {
     if (Array.isArray(value)) {
       if (value.some(item => typeof item === 'string' && item.includes('<table'))) {
         return value.map((item, index) => {
-          const tablaJSX = parsearTablaHTML(item);
-          if (tablaJSX) {
+          const tableJSX = parseTableHTML(item);
+          if (tableJSX) {
             return (
               <TableContainer key={index} component={Paper} style={{ marginTop: 10 }}>
                 <div dangerouslySetInnerHTML={{ __html: item }} />
@@ -83,12 +83,16 @@ export const Product = () => {
         <StyledTableContainer component={Paper} style={{ marginTop: 20 }}>
           <Table>
             <TableBody>
-              {filteredEntries.map(([k, v]) => (
-                <TableRow key={k}>
-                  <TableCell>{k}</TableCell>
-                  <TableCell>{renderValue(v)}</TableCell>
-                </TableRow>
-              ))}
+              {filteredEntries.map(([k, v]) => {
+                // Reemplaza los guiones bajos con espacios
+                const formattedKey = k.replace(/_/g, ' ');
+                return (
+                  <TableRow key={k}>
+                    <TableCell>{formattedKey}</TableCell>
+                    <TableCell>{renderValue(v)}</TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </StyledTableContainer>
@@ -101,23 +105,26 @@ export const Product = () => {
   return (
     <StyledContainer maxWidth="lg">
       <StyledTitle variant="h4">Detalles del medicamento</StyledTitle>
-        {/* Mostrar detalles de openfda */}
-        <Typography variant="h5">{product.openfda?.generic_name}</Typography>
-        <Typography>{product.openfda?.brand_name}</Typography>
-        
-        {/* Mostrar detalles de todas las propiedades de product */}
-        <StyledTableContainer>
-          <Table>
-            <TableBody>
-              {Object.entries(product).map(([key, value]) => (
+      {/* Mostrar nombres producto */}
+      <Typography variant="h5">{product.openfda?.generic_name}</Typography>
+      <Typography>{product.openfda?.brand_name}</Typography>
+      {/* Mostrar detalles de todas las propiedades de product */}
+      <StyledTableContainer>
+        <Table>
+          <TableBody>
+            {Object.entries(product).map(([key, value]) => {
+              // Reemplaza los guiones bajos con espacios
+              const formattedKey = key.replace(/_/g, ' ');
+              return (
                 <TableRow key={key}>
-                  <TableCell>{key}</TableCell>
+                  <TableCell>{formattedKey}</TableCell>
                   <TableCell>{renderValue(value)}</TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </StyledTableContainer>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </StyledTableContainer>
       <Button variant="contained" color="primary" onClick={() => navigate(`/results?query=${query}`)}>
         Volver a Resultados
       </Button>
