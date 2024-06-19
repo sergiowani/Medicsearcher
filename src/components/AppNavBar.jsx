@@ -51,7 +51,12 @@ export default function AppNavBar({ onClick }) {
     <ToolbarContainer>
       <StyledAppBar position="static">
         <Toolbar>
-          <Logo variant="h4" component="div" sx={{ flexGrow: 1 }} onClick={handleClick}>
+          <Logo 
+            variant="h4" 
+            component="div" 
+            sx={{ flexGrow: 1 }} 
+            onClick={handleClick}
+          >
             <span style={{ color: '#4285F4' }}>P</span>
             <span style={{ color: '#DB4437' }}>h</span>
             <span style={{ color: '#F4B400' }}>a</span>
@@ -60,8 +65,19 @@ export default function AppNavBar({ onClick }) {
             <span style={{ color: '#DB4437' }}>m</span>
             <span style={{ color: '#4285F4' }}>a</span>
           </Logo>
-          <SearchBar flexDirection="row" marginBottom={0} justifyContent="center" alignItems="baseline" marginTop={20} button1MarginLeft={10} onClick={onClick} />
-          <DarkMode checked={darkMode} onChange={toggleTheme} />
+          <SearchBar 
+            flexDirection="row" 
+            marginBottom={0} 
+            justifyContent="center" 
+            alignItems="baseline" 
+            marginTop={20} 
+            button1MarginLeft={10} 
+            onClick={onClick} 
+          />
+          <DarkMode 
+            checked={darkMode} 
+            onChange={toggleTheme} 
+          />
         </Toolbar>
       </StyledAppBar>
     </ToolbarContainer>

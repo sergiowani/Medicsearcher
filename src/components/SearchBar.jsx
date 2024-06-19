@@ -3,6 +3,8 @@ import { TextField, Button, InputAdornment } from "@mui/material";
 import { Search as SearchIcon, Backspace as BackspaceIcon } from "@mui/icons-material";
 import { styled, useTheme } from "@mui/system";
 
+/* estilos */
+
 const SearchContainer = styled('div')(({ flexDirection, marginBottom, justifyContent, alignItems, marginTop }) => ({
   display: 'flex',
   flexDirection: flexDirection || 'column',
@@ -66,6 +68,8 @@ const StyledInputAdornment = styled(InputAdornment)({
   }
 });
 
+/* componente */
+
 export const SearchBar = ({ flexDirection, marginBottom, justifyContent, alignItems, marginTop, button1MarginLeft, onClick }) => {
   const [query, setQuery] = useState(""); 
   const theme = useTheme();
@@ -91,7 +95,13 @@ export const SearchBar = ({ flexDirection, marginBottom, justifyContent, alignIt
   };
 
   return (
-    <SearchContainer flexDirection={flexDirection} marginBottom={marginBottom} justifyContent={justifyContent} alignItems={alignItems} marginTop={marginTop}>
+    <SearchContainer 
+      flexDirection={flexDirection} 
+      marginBottom={marginBottom} 
+      justifyContent={justifyContent} 
+      alignItems={alignItems} 
+      marginTop={marginTop}
+    >
       <StyledTextField
         variant="outlined"
         value={query}
@@ -113,8 +123,17 @@ export const SearchBar = ({ flexDirection, marginBottom, justifyContent, alignIt
         }}
       />
       <ButtonContainer>
-        <StyledButton variant="contained" onClick={handleSearch} style={{ marginLeft: button1MarginLeft }}>Buscar con Phaarma</StyledButton>
-        <StyledButton2 variant="contained" onClick={handleSearch}>Voy a tener suerte</StyledButton2>
+        <StyledButton 
+          variant="contained" 
+          style={{ marginLeft: button1MarginLeft }}
+          onClick={handleSearch} 
+        >Buscar con Phaarma
+        </StyledButton>
+        <StyledButton2 
+          variant="contained" 
+          onClick={handleSearch}
+        >Voy a tener suerte
+        </StyledButton2>
       </ButtonContainer>
     </SearchContainer>
   );

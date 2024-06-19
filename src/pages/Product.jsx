@@ -125,8 +125,11 @@ export const Product = () => {
           </TableBody>
         </Table>
       </StyledTableContainer>
-      <Button variant="contained" color="primary" onClick={() => navigate(`/results?query=${query}`)}>
-        Volver a Resultados
+      <Button 
+        variant="contained" 
+        color="primary" 
+        onClick={() => navigate(`/results?query=${query}`)}
+      >Volver a Resultados
       </Button>
     </StyledContainer>
   );

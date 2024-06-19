@@ -8,7 +8,7 @@ export const useTheme = () => useContext(ThemeContext);
 export const ThemeContextProvider = ({ children }) => {
   const [darkMode, setDarkMode] = useState(false);
 
-  // Load theme from localStorage
+  // Cargar theme en localStorage
   useEffect(() => {
     const savedTheme = localStorage.getItem('darkMode');
     if (savedTheme !== null) {

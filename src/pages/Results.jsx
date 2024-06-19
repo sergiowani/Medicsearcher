@@ -49,9 +49,6 @@ const ErrorMessage = styled(Typography)({
 
 const StyledLink = styled(MuiLink)({
   cursor: 'pointer',
-/*   '@media (max-width: 600px)': {
-    textAlign: 'center',
-  }, */
 });
 
 /* componente */
@@ -65,7 +62,7 @@ export const Results = () => {
 
   let url = `https://api.fda.gov/drug/label.json?search=openfda.brand_name:${query}+OR+openfda.generic_name:${query}&limit=10`
 
-  const { response, error, loading } = useAxios({ url, method: 'get' })
+  const { response, loading } = useAxios({ url, method: 'get' })
 
   useEffect(() => {
     if (response !== null) {
