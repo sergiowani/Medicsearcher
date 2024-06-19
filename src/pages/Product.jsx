@@ -1,7 +1,8 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Container, Typography, Button, Table, TableBody, TableCell, TableContainer, TableRow, Paper } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { Container, Typography, Button, Table, TableBody, TableCell, TableContainer, TableRow, useMediaQuery, Box } from '@mui/material';
+import { styled, useTheme  } from '@mui/material/styles';
+import parse from 'html-react-parser';
 
 /* estilos */
 
@@ -44,93 +45,92 @@ const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
 export const Product = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const theme = useTheme();
   const product = location.state?.product;
   const query = location.state?.query;
+  const isTabletOrMobile = useMediaQuery(theme.breakpoints.down('md'));
 
-  // Función para convertir el string de la tabla en JSX
-  const parseTableHTML = (tableString) => {
-    let temporal = document.createElement('div');
-    temporal.innerHTML = tableString.trim();
+  // creo un array de string de todas las claves del objeto product
+  const propiedades = Object.keys(product);
 
-    let tableHTML = temporal.querySelector('table');
+  // hago un array de objetos, por cada propiedad de product creo un objeto con un título y un contenido para pintar abajo
+  const final = propiedades.map(e=>{
+    return {title: e, contenido: product[e]}
+  });
 
-    return tableHTML;
+  // función para capitalizar la primera letra y reemplazar guiones bajos
+  const titleFunction = (str) => {
+    const result = str.replace(/_/g, ' ');
+    return result.charAt(0).toUpperCase() + result.slice(1);
   };
 
-  // Función para renderizar el valor
-  const renderValue = (value) => {
-    if (Array.isArray(value)) {
-      if (value.some(item => typeof item === 'string' && item.includes('<table'))) {
-        return value.map((item, index) => {
-          const tableJSX = parseTableHTML(item);
-          if (tableJSX) {
-            return (
-              <TableContainer key={index} component={Paper} style={{ marginTop: 10 }}>
-                <div dangerouslySetInnerHTML={{ __html: item }} />
-              </TableContainer>
-            );
-          } else {
-            return null;
-          }
-        });
-      } else {
-        return value.join(', ');
-      }
-    } else if (typeof value === 'object' && value !== null) {
-      const filteredEntries = Object.entries(value).filter(([key, val]) => !key.toLowerCase().includes('table'));
-
-      return (
-        <StyledTableContainer component={Paper} style={{ marginTop: 20 }}>
-          <Table>
-            <TableBody>
-              {filteredEntries.map(([k, v]) => {
-                // Reemplaza los guiones bajos con espacios
-                const formattedKey = k.replace(/_/g, ' ');
-                return (
-                  <TableRow key={k}>
-                    <TableCell>{formattedKey}</TableCell>
-                    <TableCell>{renderValue(v)}</TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </StyledTableContainer>
-      );
-    } else {
-      return String(value);
-    }
-  };
-
-  return (
-    <StyledContainer maxWidth="lg">
+  const desktopContent = (
+    <>
       <StyledTitle variant="h4">Detalles del medicamento</StyledTitle>
-      {/* Mostrar nombres producto */}
       <Typography variant="h5">{product.openfda?.generic_name}</Typography>
       <Typography>{product.openfda?.brand_name}</Typography>
-      {/* Mostrar detalles de todas las propiedades de product */}
       <StyledTableContainer>
         <Table>
           <TableBody>
-            {Object.entries(product).map(([key, value]) => {
-              // Reemplaza los guiones bajos con espacios
-              const formattedKey = key.replace(/_/g, ' ');
-              return (
-                <TableRow key={key}>
-                  <TableCell>{formattedKey}</TableCell>
-                  <TableCell>{renderValue(value)}</TableCell>
-                </TableRow>
-              );
-            })}
+            {final.map((e, i) => (
+              <TableRow key={i}>
+                <TableCell>{titleFunction(e.title)}</TableCell>
+                <TableCell>
+                  {typeof e.contenido === "string" && <p>{e?.contenido}</p>}
+                  {Array.isArray(e.contenido) && e.contenido.map((elem, idx) => {
+                    return e.title.includes("table") ? parse(elem) : <p key={idx}>{elem}</p>;
+                  })}
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </StyledTableContainer>
-      <Button 
-        variant="contained" 
-        color="primary" 
+      <Button
+        variant="contained"
+        color="primary"
         onClick={() => navigate(`/results?query=${query}`)}
-      >Volver a Resultados
+      >
+        Volver a Resultados
       </Button>
+    </>
+  );
+
+  const tabletContent = (
+    <>
+      <StyledTitle variant="h5">Detalles del medicamento</StyledTitle>
+      <Typography variant="h6">{product.openfda?.generic_name}</Typography>
+      <Typography>{product.openfda?.brand_name}</Typography>
+      <Box>
+        {final.map((e, i) => (
+          <Box key={i} mb={2}>
+            <Typography 
+              variant="h6" 
+              sx={{ textDecoration: 'underline' }}
+            >{titleFunction(e.title)}
+            </Typography>
+            <Box sx={{ textAlign: 'left' }}>
+              {typeof e.contenido === "string" && <Typography>{e?.contenido}</Typography>}
+              {Array.isArray(e.contenido) && e.contenido.map((elem, idx) => {
+                return e.title.includes("table") ? parse(elem) : <Typography key={idx}>{elem}</Typography>;
+              })}
+            </Box>
+          </Box>
+        ))}
+      </Box>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => navigate(`/results?query=${query}`)}
+      >
+        Volver a Resultados
+      </Button>
+    </>
+  );
+
+  return (
+    <StyledContainer maxWidth={isTabletOrMobile ? "sm" : "lg"}>
+      {isTabletOrMobile ? tabletContent : desktopContent}
     </StyledContainer>
   );
 };
