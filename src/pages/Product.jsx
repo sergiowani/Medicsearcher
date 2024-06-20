@@ -3,12 +3,14 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Container, Typography, Button, Table, TableBody, TableCell, TableContainer, TableRow, useMediaQuery, Box } from '@mui/material';
 import { styled, useTheme  } from '@mui/material/styles';
 import parse from 'html-react-parser';
+import { formatString } from '../helper/stringUtil';
+
 
 /* estilos */
 
 const StyledContainer = styled(Container)(({ theme }) => ({
   minHeight: '100vh',
-  minWidth: 'calc(100vw - 17px)',
+  minWidth: '100%',
   paddingTop: 20,
   paddingBottom: 20,
   textAlign: 'center',
@@ -20,7 +22,6 @@ const StyledContainer = styled(Container)(({ theme }) => ({
 const StyledTitle = styled(Typography)({
   marginBottom: 20,
 });
-
 
 const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
   marginTop: 20,
@@ -58,12 +59,6 @@ export const Product = () => {
     return {title: e, contenido: product[e]}
   });
 
-  // función para capitalizar la primera letra y reemplazar guiones bajos
-  const titleFunction = (str) => {
-    const result = str.replace(/_/g, ' ');
-    return result.charAt(0).toUpperCase() + result.slice(1);
-  };
-
   const desktopContent = (
     <>
       <StyledTitle variant="h4">Detalles del medicamento</StyledTitle>
@@ -74,7 +69,7 @@ export const Product = () => {
           <TableBody>
             {final.map((e, i) => (
               <TableRow key={i}>
-                <TableCell>{titleFunction(e.title)}</TableCell>
+                <TableCell>{formatString(e.title)}</TableCell>
                 <TableCell>
                   {typeof e.contenido === "string" && <p>{e?.contenido}</p>}
                   {Array.isArray(e.contenido) && e.contenido.map((elem, idx) => {
@@ -107,7 +102,7 @@ export const Product = () => {
             <Typography 
               variant="h6" 
               sx={{ textDecoration: 'underline' }}
-            >{titleFunction(e.title)}
+            >{formatString(e.title)}
             </Typography>
             <Box sx={{ textAlign: 'left' }}>
               {typeof e.contenido === "string" && <Typography>{e?.contenido}</Typography>}

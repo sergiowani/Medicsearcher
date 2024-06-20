@@ -11,7 +11,7 @@ import { useTheme } from '../contexts/ThemeContext';
 
 const StyledContainer = styled(Container)(({ theme }) => ({
   minHeight: '100vh',
-  minWidth: '100vw',
+  minWidth: '100%',
   paddingTop: 20,
   paddingBottom: 20,
   backgroundColor: theme.palette.mode === 'dark' ? '#121212' : '#ffffff',
@@ -71,7 +71,7 @@ export const Results = () => {
   },[loading, response])
 
   return (
-    <div>
+    <>
       {/* <AppNavBar onClick={(text)=>{setQuery(text)}} /> */}
       <AppNavBar onClick={(text)=>{navigate(`/results?query=${text}`)}} />
       <StyledContainer maxWidth="lg" theme={{ palette: { mode: darkMode ? 'dark' : 'light' } }}>
@@ -92,6 +92,6 @@ export const Results = () => {
             )}
         </StyledList>
       </StyledContainer>
-    </div>
+    </>
   );
 };
